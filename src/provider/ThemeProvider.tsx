@@ -7,14 +7,14 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
   const theme = createTheme({
     palette: {
       primary: {
-        main: purple[900],
+        main: purple[500],
       },
       secondary: {
         main: blue[300],
       },
     },
     typography: {
-      fontFamily: "Roboto",
+      fontFamily: "Public Sans",
       fontSize: 14,
     },
   });
