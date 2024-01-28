@@ -1,9 +1,9 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { Chip, Divider } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
-import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
@@ -11,23 +11,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { Link } from "react-router-dom";
-
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" to="https://mui.com/">
-        Your Website
-      </Link>
-      {new Date().getFullYear()}
-    </Typography>
-  );
-}
+import OAuthProviders from "../components/global/OAuthProviders";
 
 export default function SignUp() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -41,7 +25,7 @@ export default function SignUp() {
 
   return (
     <>
-      <Container component="main" maxWidth="xs">
+      <Box flex={1} maxWidth={444} mx="auto">
         <CssBaseline />
         <Box
           sx={{
@@ -51,59 +35,71 @@ export default function SignUp() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <Avatar sx={{ m: 1, bgcolor: "purple" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            Welcome to Dadu-web
+          </Typography>
+          <Typography fontSize={14} color="GrayText">
+            Please sign-up to your account and start the adventure
           </Typography>
           <Box
             component="form"
             noValidate
             onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
+            sx={{ mt: 1 }}
           >
-            <Grid container spacing={2}>
+            <Grid container columnSpacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  autoComplete="given-name"
-                  name="firstName"
+                  margin="normal"
+                  size="small"
                   required
                   fullWidth
                   id="firstName"
                   label="First Name"
+                  name="firstName"
+                  autoComplete="firstName"
                   autoFocus
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  required
+                  margin="normal"
+                  size="small"
                   fullWidth
                   id="lastName"
                   label="Last Name"
                   name="lastName"
-                  autoComplete="family-name"
+                  autoComplete="lastName"
+                  autoFocus
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  margin="normal"
+                  size="small"
                   required
                   fullWidth
                   id="email"
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  autoFocus
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  margin="normal"
+                  size="small"
                   required
                   fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
                   id="password"
-                  autoComplete="new-password"
+                  label="Password "
+                  name="password"
+                  autoComplete="password"
+                  autoFocus
                 />
               </Grid>
               <Grid item xs={12}>
@@ -111,7 +107,11 @@ export default function SignUp() {
                   control={
                     <Checkbox value="allowExtraEmails" color="primary" />
                   }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
+                  label={
+                    <Typography fontSize={14}>
+                      Accept terms and conditions ?
+                    </Typography>
+                  }
                 />
               </Grid>
             </Grid>
@@ -119,21 +119,27 @@ export default function SignUp() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 1, mb: 2 }}
             >
               Sign Up
             </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link className="text-blue-500" to="/sign-in">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
+            <Grid container justifyContent="center" gap={1}>
+              <Typography fontSize={14}>Already have an account?</Typography>
+              <Link className="text-blue-500" to="/sign-in">
+                <Typography fontSize={14} sx={{ color: "purple" }}>
+                  Sign in
+                </Typography>
+              </Link>
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
-      </Container>
+        <Box my={2}>
+          <Divider>
+            <Chip label="Or" size="small" />
+          </Divider>
+        </Box>
+        <OAuthProviders />
+      </Box>
     </>
   );
 }
