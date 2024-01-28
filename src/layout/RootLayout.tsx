@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 import Header from "../components/header/Header";
@@ -10,10 +11,12 @@ export default function RootLayout() {
     return <Navigate to="/sign-in" />;
   } else {
     return (
-      <div>
+      <Box bgcolor="lightgray" minHeight="100vh">
         <Header />
-        <Outlet />
-      </div>
+        <Box>
+          <Outlet />
+        </Box>
+      </Box>
     );
   }
 }
