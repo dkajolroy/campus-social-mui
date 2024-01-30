@@ -13,7 +13,7 @@ import Typography from "@mui/material/Typography";
 import SearchInput from "./SearchInput";
 import UserMenuDialog from "./UserMenuDialog";
 
-const pages = ["Home", "Corporate"];
+const pages = ["Feed", "Friends", "Video"];
 
 export default function Header() {
   return (

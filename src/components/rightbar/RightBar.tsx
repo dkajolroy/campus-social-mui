@@ -33,7 +33,7 @@ export default function RightBar() {
             padding: 1,
           }}
         >
-          <Typography fontSize={22}>Trading</Typography>
+          <Typography fontSize={22}>Hashtag</Typography>
 
           <List component="ul" aria-labelledby="nested-list-subheader">
             {trendings.map((tx, ix) => {
@@ -53,4 +53,4 @@ export default function RightBar() {
   );
 }
 
-const trendings = ["games", "viralpost", "test", "job", "new", "update"];
+const trendings = ["Jio biden", "modi", "Donald trump", "job", "new", "apple"];

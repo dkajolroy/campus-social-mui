@@ -1,3 +1,4 @@
+import "react-multi-carousel/lib/styles.css";
 import { Route, Routes } from "react-router-dom";
 import SignInPage from "./_auth/SignInPage";
 import SignUpPage from "./_auth/SignUpPage";

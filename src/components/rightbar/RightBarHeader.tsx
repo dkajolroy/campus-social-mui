@@ -29,7 +29,7 @@ export default function MediaCard() {
       />
       <CardContent sx={{ mt: "40px" }}>
         <Typography align="center" gutterBottom variant="h5" component="div">
-          Dadu-vai
+          Guru-vai
         </Typography>
         <Typography align="center" variant="body2" color="text.secondary">
           @username | 0 Follower | 0 Following
