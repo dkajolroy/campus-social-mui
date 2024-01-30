@@ -11,7 +11,7 @@ export default function RootLayout() {
     return <Navigate to="/sign-in" />;
   } else {
     return (
-      <Box bgcolor="lightgray" minHeight="100vh">
+      <Box bgcolor="whitesmoke" minHeight="100vh" position="relative">
         <Header />
         <Box>
           <Outlet />

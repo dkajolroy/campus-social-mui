@@ -32,7 +32,7 @@ export default function MediaCard() {
           Dadu-vai
         </Typography>
         <Typography align="center" variant="body2" color="text.secondary">
-          0 Follower | 1 Post | 0 Following
+          @username | 0 Follower | 0 Following
         </Typography>
       </CardContent>
       <CardActions sx={{ justifyContent: "center" }}>
