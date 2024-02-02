@@ -12,20 +12,26 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import OAuthProviders from "../components/global/OAuthProviders";
+import { addUser } from "../slices/authSlice";
 
 export default function SignInPage() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = React.useState(false);
 
+  // Handle form submit
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const data = {
+      email: formData.get("email"),
+      password: formData.get("password"),
+    }; // data
+    // submit login
+    dispatch(addUser({ user: data as User, token: "text" })); // login data stored
+  };
   return (
     <Box flex={1} maxWidth={444} mx="auto">
       <CssBaseline />

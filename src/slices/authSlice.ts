@@ -5,8 +5,8 @@ interface InitialState {
   token: string | null;
 }
 const initialState: InitialState = {
-  user: { _id: "10" }, // dev mode for login
-  token: "null", // dev mode for login
+  user: null, // dev mode for login
+  token: null, // dev mode for login
 };
 const authSlice = createSlice({
   name: "auth",
