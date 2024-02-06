@@ -2,7 +2,7 @@
 import AdbIcon from "@mui/icons-material/Adb";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { Badge } from "@mui/material";
+import { Badge, SwipeableDrawer } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -10,12 +10,35 @@ import Container from "@mui/material/Container";
 import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import MessageDialog from "../dialog/MessageDialog";
 import SearchInput from "./SearchInput";
 import UserMenuDialog from "./UserMenuDialog";
-
 const pages = ["Feed", "Friends", "Video"];
 
 export default function Header() {
+  const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null); // dialog
+  const open = Boolean(anchorEl); //null or element => convert to boolean value
+  const [openDrawer, setOpenDrawer] = useState(false); // drawer
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    // close dialog
+    setAnchorEl(null);
+  };
+  function goMessage() {
+    // goto message page
+    navigate("/message");
+    setAnchorEl(null);
+  }
+  function toggleDrawer() {
+    // open right drawer
+    setAnchorEl(null);
+    setOpenDrawer((s) => !s);
+  }
   return (
     <AppBar position="sticky">
       <Container maxWidth="xl">
@@ -28,32 +51,32 @@ export default function Header() {
           }}
         >
           {/* Logo */}
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <AdbIcon sx={{ display: { md: "flex" }, mr: 1 }} />
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
+          <Link to="/">
+            <Box
               sx={{
-                mr: 2,
-                display: { md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
               }}
             >
-              LOGO
-            </Typography>
-          </Box>
+              <AdbIcon sx={{ display: { md: "flex" }, mr: 1 }} />
+              <Typography
+                variant="h6"
+                noWrap
+                sx={{
+                  mr: 2,
+                  display: { md: "flex" },
+                  fontFamily: "monospace",
+                  fontWeight: 700,
+                  letterSpacing: ".3rem",
+                  color: "inherit",
+                  textDecoration: "none",
+                }}
+              >
+                LOGO
+              </Typography>
+            </Box>
+          </Link>
 
           <Box
             sx={{
@@ -90,6 +113,7 @@ export default function Header() {
             {/* Icon buttons */}
             <Box>
               <IconButton
+                onClick={handleClick}
                 size="large"
                 aria-label="show 4 new mails"
                 color="inherit"
@@ -98,6 +122,13 @@ export default function Header() {
                   <MailIcon />
                 </Badge>
               </IconButton>
+              <MessageDialog
+                anchorEl={anchorEl}
+                goMessage={goMessage}
+                handleClose={handleClose}
+                open={open}
+                toggleDrawer={toggleDrawer} //for open drawer
+              />
               <IconButton
                 size="large"
                 aria-label="show 17 new notifications"
@@ -115,6 +146,26 @@ export default function Header() {
           </Box>
         </Toolbar>
       </Container>
+      <SwipeableDrawer
+        anchor="right"
+        open={openDrawer}
+        onClose={toggleDrawer}
+        onOpen={toggleDrawer}
+      >
+        <Box
+          width={300}
+          justifyContent="space-between"
+          flexDirection="column"
+          display="flex"
+          alignItems="center"
+          padding={5}
+          height="100%"
+        >
+          <Typography>User name</Typography>
+          <Typography>All Messages</Typography>
+          <Typography>Type quick message</Typography>
+        </Box>
+      </SwipeableDrawer>
     </AppBar>
   );
 }
