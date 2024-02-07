@@ -38,10 +38,11 @@ export default function MessagePage() {
               autoHide
               universal={true}
             >
-              <List sx={{ paddingBottom: "60px" }}>
+              <List sx={{ paddingBottom: "85px" }}>
                 {Array.from("abbaabbbaa").map((list, b) => (
                   <ListItem
                     sx={{
+                      py: 0.5,
                       justifyContent: list === "a" ? "end" : "start",
                     }}
                     key={b}

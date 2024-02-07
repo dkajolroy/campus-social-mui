@@ -41,7 +41,7 @@ export default function MessageDialog(props: Props) {
           <Telegram
             fontSize="medium"
             sx={{
-              bgcolor: "ActiveCaption",
+              bgcolor: "lightgray",
               height: 40,
               width: 40,
               p: 0.5,

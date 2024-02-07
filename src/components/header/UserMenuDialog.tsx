@@ -6,6 +6,8 @@ import Divider from "@mui/material/Divider";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import MenuItem from "@mui/material/MenuItem";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { logout } from "../../slices/authSlice";
 
 export default function UserMenuDialog() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -13,9 +15,15 @@ export default function UserMenuDialog() {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+  const dispatch = useDispatch();
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  function handleLogout() {
+    dispatch(logout());
+    handleClose();
+  }
 
   return (
     <>
@@ -55,7 +63,7 @@ export default function UserMenuDialog() {
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

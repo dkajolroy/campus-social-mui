@@ -2,7 +2,7 @@
 import AdbIcon from "@mui/icons-material/Adb";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { Badge, SwipeableDrawer } from "@mui/material";
+import { Badge } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import MessageDialog from "../dialog/MessageDialog";
+import MessageDrawer from "./MessageDrawer";
 import SearchInput from "./SearchInput";
 import UserMenuDialog from "./UserMenuDialog";
 const pages = ["Feed", "Friends", "Video"];
@@ -146,26 +147,7 @@ export default function Header() {
           </Box>
         </Toolbar>
       </Container>
-      <SwipeableDrawer
-        anchor="right"
-        open={openDrawer}
-        onClose={toggleDrawer}
-        onOpen={toggleDrawer}
-      >
-        <Box
-          width={300}
-          justifyContent="space-between"
-          flexDirection="column"
-          display="flex"
-          alignItems="center"
-          padding={5}
-          height="100%"
-        >
-          <Typography>User name</Typography>
-          <Typography>All Messages</Typography>
-          <Typography>Type quick message</Typography>
-        </Box>
-      </SwipeableDrawer>
+      <MessageDrawer toggleDrawer={toggleDrawer} openDrawer={openDrawer} />
     </AppBar>
   );
 }

@@ -2,3 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+
+/* custom css for emoji picker */
+.react-emoji{
+    flex-direction: row-reverse;
+}
+.emoji-picker-input{
+    border: 1px solid lightgray;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.emoji-picker-input.bottom-picker{  
+    min-width: 300px;
+}
+
+.emoji-picker-input:focus{
+    border: 1px solid gray;
+}
+.react-input-emoji--container{
+    margin: 0 !important;
+}
