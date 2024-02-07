@@ -20,12 +20,12 @@ export default function App() {
         <ScrollTop />
         <Routes>
           {/* Public Route */}
-          <Route element={<AuthLayout />}>
+          <Route Component={AuthLayout}>
             <Route path="/sign-in" element={<SignInPage />} />
             <Route path="/sign-up" element={<SignUpPage />} />
           </Route>
           {/* Private Route */}
-          <Route element={<RootLayout />}>
+          <Route Component={RootLayout}>
             <Route path="/" element={<HomePage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/message" element={<MessagePage />} />
