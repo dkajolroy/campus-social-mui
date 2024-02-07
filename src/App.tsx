@@ -19,16 +19,16 @@ export default function App() {
         {/* Default Position to top all pages */}
         <ScrollTop />
         <Routes>
-          {/* Public Route */}
-          <Route Component={AuthLayout}>
-            <Route path="/sign-in" element={<SignInPage />} />
-            <Route path="/sign-up" element={<SignUpPage />} />
-          </Route>
           {/* Private Route */}
           <Route Component={RootLayout}>
             <Route path="/" element={<HomePage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/message" element={<MessagePage />} />
+          </Route>
+          {/* Public Route */}
+          <Route Component={AuthLayout}>
+            <Route path="/sign-in" element={<SignInPage />} />
+            <Route path="/sign-up" element={<SignUpPage />} />
           </Route>
           {/* Global Route */}
           <Route path="/*" element={<NotFoundPage />} />
