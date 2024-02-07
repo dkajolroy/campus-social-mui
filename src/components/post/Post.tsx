@@ -28,7 +28,11 @@ export default function Post({ item }: { item: number }) {
     <Card sx={{ my: 2, position: "relative" }}>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+          <Avatar
+            src="https://mui.com/static/images/avatar/3.jpg"
+            sx={{ bgcolor: red[500] }}
+            aria-label="recipe"
+          >
             R
           </Avatar>
         }

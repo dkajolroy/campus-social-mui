@@ -30,7 +30,10 @@ export default function UserMenuDialog() {
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
         <Tooltip title="Account settings">
           <IconButton onClick={handleClick} sx={{ p: 0 }}>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+            <Avatar
+              alt="Remy Sharp"
+              src="https://mui.com/static/images/avatar/3.jpg"
+            />
           </IconButton>
         </Tooltip>
       </Box>

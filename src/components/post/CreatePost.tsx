@@ -23,7 +23,11 @@ export default function CreatePost() {
         alignItems={{ xs: "center", sm: "start" }}
         gap={1}
       >
-        <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+        <Avatar
+          src="https://mui.com/static/images/avatar/3.jpg"
+          sx={{ bgcolor: red[500] }}
+          aria-label="recipe"
+        >
           R
         </Avatar>
 

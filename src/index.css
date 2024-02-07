@@ -21,4 +21,5 @@
 }
 .react-input-emoji--container{
     margin: 0 !important;
+    border:none !important;
 }

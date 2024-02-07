@@ -17,7 +17,7 @@ export default function MediaCard() {
       />
       <Avatar
         alt="Remy Sharp"
-        src="/static/images/avatar/1.jpg"
+        src="https://mui.com/static/images/avatar/3.jpg"
         sx={{
           width: 100,
           height: 100,
