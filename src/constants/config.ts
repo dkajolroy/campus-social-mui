@@ -1,5 +1,5 @@
 export const app = {
-  appName: "Tree",
+  appName: "Campus",
   appVersion: "1.0.0",
   chatName: "Discus",
   clientCookieName: "LOGIN", // see from server to protect

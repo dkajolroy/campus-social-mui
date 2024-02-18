@@ -20,12 +20,18 @@ export default function CreatePost() {
     <Box p={2}>
       <Stack
         flexDirection={{ sm: "row", xs: "column" }}
-        alignItems={{ xs: "center", sm: "start" }}
+        // alignItems={{ xs: "center", sm: "start" }}
         gap={1}
       >
         <Avatar
           src="https://mui.com/static/images/avatar/3.jpg"
-          sx={{ bgcolor: red[500] }}
+          sx={{
+            bgcolor: red[500],
+            display: {
+              xs: "none",
+              sm: "block",
+            },
+          }}
           aria-label="recipe"
         >
           R

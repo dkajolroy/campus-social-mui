@@ -23,7 +23,6 @@ export default function HomePage() {
           item
           sm={4}
           md={3}
-          mt={2}
           position="relative"
           display={{ xs: "none", sm: "block" }}
         >
@@ -34,7 +33,7 @@ export default function HomePage() {
         </Grid>
         {/* Grid items 2 for post scroll */}
         <Grid item xs={12} sm={8} md={6}>
-          <Box display="flex" my={2} flexDirection="column">
+          <Box display="flex" mt={`${centerTop}px`} flexDirection="column">
             <Box
               mb={2}
               bgcolor="background.paper"
@@ -91,7 +90,6 @@ export default function HomePage() {
         <Grid
           item
           md={3}
-          mt={2}
           position="relative"
           display={{ xs: "none", md: "block" }}
         >
@@ -105,12 +103,14 @@ export default function HomePage() {
 }
 
 type SX = SxProps<Theme> | undefined;
+const sidebarTop = 85;
+const centerTop = sidebarTop - 64;
 const sidebarBoxSx: SX = {
   width: "100%",
   bgcolor: "background.paper",
   borderRadius: 1,
   position: "sticky",
-  top: 85,
+  top: sidebarTop,
   left: 0,
   right: 0,
 };

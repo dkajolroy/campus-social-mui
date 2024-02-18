@@ -8,32 +8,33 @@ import {
 } from "@mui/material";
 
 export default function MessageItem({ item }: { item: string }) {
+  const myText = item === "a";
   return (
     <ListItem
       sx={{
         py: 0.5,
-        justifyContent: item === "a" ? "end" : "start",
+        justifyContent: myText ? "end" : "start",
+        flexDirection: myText ? "row-reverse" : "row",
       }}
     >
+      <ListItemAvatar sx={{ justifyContent: "center", display: "flex" }}>
+        <Avatar
+          alt="Remy Sharp"
+          src="https://mui.com/static/images/avatar/2.jpg"
+        />
+      </ListItemAvatar>
       <Stack
-        direction="row"
         sx={{
           maxWidth: "80%",
           borderRadius: 1,
-          bgcolor: "background.paper",
+          background: "white",
           p: 1,
         }}
       >
-        <ListItemAvatar>
-          <Avatar
-            alt="Remy Sharp"
-            src="https://mui.com/static/images/avatar/2.jpg"
-          />
-        </ListItemAvatar>
         <ListItemText
           primary={
             <Stack
-              direction="row"
+              direction={myText ? "row-reverse" : "row"}
               flexWrap="wrap"
               justifyContent="space-between"
             >

@@ -9,14 +9,13 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import OAuthProviders from "../components/global/OAuthProviders";
 import { app } from "../constants/config";
 
 export default function ForgetPage() {
   const { palette } = useTheme();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   // Handle form submit
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -24,9 +23,9 @@ export default function ForgetPage() {
     const formData = new FormData(event.currentTarget);
     const data = {
       email: formData.get("email"),
-      password: formData.get("password"),
-    }; // data
+    };
     // submit login
+    console.log(data);
   };
   return (
     <Box flex={1} maxWidth={444} mx="auto">
