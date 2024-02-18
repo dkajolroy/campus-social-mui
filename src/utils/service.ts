@@ -1,19 +1,17 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { app } from "../constants/config";
 
 // base api url
-export const baseApi = axios.create({
+export const axiosInstance = axios.create({
   baseURL: app.baseApiUrl,
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
 
-// Apis error handling
-export const handleError = (error: any): string => {
-  const err =
-    error.response && error.message
-      ? error.response?.data.message
-      : error.message;
+// catch(error) handle
+export const getCatchError = (error: AxiosError): { message: string } => {
+  const err = (error.response?.data as { message: string }) || error;
   return err;
 };

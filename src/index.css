@@ -6,6 +6,7 @@
 /* custom css for emoji picker */
 .react-emoji{
     flex-direction: row-reverse;
+    max-width: 320px;
 }
 .emoji-picker-input{
     border: 1px solid lightgray;
@@ -13,7 +14,7 @@
     border-bottom-left-radius: 5px;
 }
 .emoji-picker-input.bottom-picker{  
-    min-width: 300px;
+    width: '100%';
 }
 
 .emoji-picker-input:focus{
@@ -22,4 +23,12 @@
 .react-input-emoji--container{
     margin: 0 !important;
     border:none !important;
+}
+/* Message drawer */
+.react-emoji-picker--wrapper{
+    right: auto !important;
+    left: 0 !important;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    background-color: white;
 }

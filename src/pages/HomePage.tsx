@@ -1,12 +1,20 @@
-import { Box, Container, Grid, SxProps, Theme } from "@mui/material";
+import { Box, Button, Container, Grid, SxProps, Theme } from "@mui/material";
 import Carousel from "react-multi-carousel";
 import ActiveFollowers from "../components/feed/ActiveFollowers";
 import CreatePost from "../components/post/CreatePost";
 import Post from "../components/post/Post";
 import RightBar from "../components/rightbar/RightBar";
 import Sidebar from "../components/sidebar/Sidebar";
+import { axiosInstance } from "../utils/service";
 
 export default function HomePage() {
+  async function demo() {
+    // for test protect route
+    const { data } = await axiosInstance.get("/api/posts");
+    console.log(data);
+    console.log("data");
+  }
+
   return (
     <Container maxWidth="xl">
       <Grid container spacing={2}>
@@ -20,6 +28,7 @@ export default function HomePage() {
           display={{ xs: "none", sm: "block" }}
         >
           <Box sx={sidebarBoxSx}>
+            <Button onClick={demo}>OK</Button>
             <Sidebar />
           </Box>
         </Grid>

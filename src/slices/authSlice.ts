@@ -1,5 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { baseApi, handleError } from "../utils/service";
+import { AxiosError } from "axios";
+import { axiosInstance, getCatchError } from "../utils/service";
+import { openSnackbar } from "./toggleSlice";
 
 interface InitialState {
   user: User | null;
@@ -15,52 +17,99 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    addUser: (
-      state,
-      { payload }: PayloadAction<{ user: User; token: string }>
-    ) => {
-      state.user = payload.user;
-      state.token = payload.token;
-    },
     logout: (state) => {
+      // dummy client side only
       state.user = null;
       state.token = null;
     },
   },
   extraReducers: (builder) => {
+    // for sign in
     builder.addCase(signIn.pending, (state) => {
-      // Pending
       state.isLoading = true;
     }),
       builder.addCase(
         signIn.fulfilled,
-        (state, { payload }: PayloadAction<{ user: User; token: string }>) => {
-          // Success
+        (state, { payload }: PayloadAction<LogRes | null>) => {
           state.isLoading = false;
-          state.user = payload.user;
-          state.token = payload.token;
+          if (payload) {
+            state.user = payload.user;
+            state.token = payload.token;
+          }
         }
       ),
       builder.addCase(signIn.rejected, (state) => {
-        // Error
+        // const { message } = action.payload as { message: string };
+        state.isLoading = false;
+      });
+    // For sign up
+    builder.addCase(signUp.pending, (state) => {
+      state.isLoading = true;
+    }),
+      builder.addCase(
+        signUp.fulfilled,
+        (state, { payload }: PayloadAction<LogRes | null>) => {
+          state.isLoading = false;
+          if (payload) {
+            state.user = payload.user;
+            state.token = payload.token;
+          }
+        }
+      ),
+      builder.addCase(signUp.rejected, (state) => {
+        // const { message } = action.payload as { message: string };
         state.isLoading = false;
       });
   },
 });
 
-export const { addUser, logout } = authSlice.actions;
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;
 
 // login api
+interface LogRes {
+  user: User;
+  message: string;
+  token: string;
+}
+// Sign in
 export const signIn = createAsyncThunk(
   "/sign-in",
-  async (formData: SignInput, { rejectWithValue }) => {
+  async (formData: SignInput, { rejectWithValue, dispatch }) => {
     try {
-      const res = await baseApi.post("/auth/sign-in", formData);
-      return res.data;
+      const res = await axiosInstance.post("/api/auth/sign-in", formData);
+      dispatch(openSnackbar({ message: res.data.message, mode: "success" }));
+      return res.data as LogRes; // 200++ to fulfilled
     } catch (error) {
-      // login error snackbar
-      rejectWithValue(handleError(error));
+      dispatch(
+        openSnackbar({
+          message: getCatchError(error as AxiosError).message,
+          mode: "error",
+        })
+      );
+      // 400-500 rejected
+      return rejectWithValue(getCatchError(error as AxiosError));
+    }
+  }
+);
+// Sign up
+export const signUp = createAsyncThunk(
+  "/sign-up",
+  async (formData: SignUpInput, { rejectWithValue, dispatch }) => {
+    try {
+      const res = await axiosInstance.post("/api/auth/sign-up", formData);
+
+      dispatch(openSnackbar({ message: res.data.message, mode: "success" }));
+      return res.data as LogRes; // 200++ to fulfilled
+    } catch (error) {
+      dispatch(
+        openSnackbar({
+          message: getCatchError(error as AxiosError).message,
+          mode: "error",
+        })
+      );
+      // 400-500 rejected
+      return rejectWithValue(getCatchError(error as AxiosError));
     }
   }
 );

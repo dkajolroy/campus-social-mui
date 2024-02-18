@@ -1,14 +1,24 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
+import { encryptTransform } from "redux-persist-transform-encrypt";
 import storage from "redux-persist/lib/storage";
+import { app } from "../constants/config";
 import reducer from "./reducer";
 
 const persistConfig = {
   key: "root",
   storage,
   version: 1,
+  transforms: [
+    encryptTransform({
+      secretKey: app.secrete_key,
+      onError: function (_) {
+        // Handle the error.
+        window.location.reload();
+      },
+    }),
+  ],
 };
-
 const persistedReducer = persistReducer(persistConfig, reducer);
 
 export const store = configureStore({
@@ -22,4 +32,4 @@ export const store = configureStore({
 
 export const persistedStore = persistStore(store);
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootStore = ReturnType<typeof store.getState>;

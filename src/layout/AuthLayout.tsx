@@ -3,13 +3,16 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
-import { RootState } from "../store/store";
+import { RootStore } from "../store/store";
 
+import { useTheme } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import OAuthProviders from "../components/global/OAuthProviders";
+import { app } from "../constants/config";
 
 export default function AuthLayout() {
-  const { user, token } = useSelector((s: RootState) => s.authState);
+  const { user, token } = useSelector((s: RootStore) => s.authState);
+  const theme = useTheme();
 
   // Authenticate middleware
   if (user && token) {
@@ -25,7 +28,7 @@ export default function AuthLayout() {
                 display: { md: "flex", xs: "none", flexDirection: "column" },
                 justifyContent: "center",
                 alignItems: "center",
-                bgcolor: "purple",
+                bgcolor: theme.palette.primary.main,
               }}
               flex={{ lg: 2, md: 1 }}
             >
@@ -34,7 +37,7 @@ export default function AuthLayout() {
                 fontSize={32}
                 fontWeight="bold"
               >
-                Join Dadu-web
+                Join {app.appName}
               </Typography>
               <Typography align="center" fontSize={14} sx={{ color: "white" }}>
                 The best social media platform of <br /> Bangladesh
@@ -52,7 +55,10 @@ export default function AuthLayout() {
                 <OAuthProviders />
               </Box>
               <Typography sx={{ color: "white" }} fontSize={14}>
-                Dadu-web Terms and condition
+                {app.appName} Terms and condition
+              </Typography>
+              <Typography sx={{ color: "lightgray" }} fontSize={14}>
+                v{app.appVersion}
               </Typography>
             </Box>
             {/* Auth Form  */}

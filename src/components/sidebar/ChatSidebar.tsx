@@ -13,6 +13,7 @@ import { Divider, alpha } from "@mui/material";
 import InputBase from "@mui/material/InputBase";
 import Toolbar from "@mui/material/Toolbar";
 import { styled } from "@mui/system";
+import { useNavigate } from "react-router-dom";
 const messages = [
   {
     id: 1,
@@ -84,11 +85,11 @@ export default function ChatSidebar() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Paper square sx={{ pb: "50px" }}>
+      <Paper square sx={{ pb: "50px", boxShadow: "none" }}>
         <Toolbar>
           <Search>
             <SearchIconWrapper>
-              <SearchIcon />
+              <SearchIcon color="disabled" />
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"
@@ -98,33 +99,50 @@ export default function ChatSidebar() {
         </Toolbar>
 
         <List sx={{ mb: 2 }}>
-          {messages.map(({ id, primary, secondary, person }) => (
-            <React.Fragment key={id}>
-              {id === 1 && (
-                <ListSubheader sx={{ bgcolor: "background.paper" }}>
-                  Today
-                </ListSubheader>
-              )}
-              {id === 3 && (
-                <ListSubheader sx={{ bgcolor: "background.paper" }}>
-                  Yesterday
-                </ListSubheader>
-              )}
-              <ListItemButton>
-                <ListItemAvatar>
-                  <Avatar alt="Profile Picture" src={person} />
-                </ListItemAvatar>
-                <ListItemText
-                  primary={primary}
-                  secondary={secondary.slice(0, 30)}
-                />
-              </ListItemButton>
-
-              <Divider variant="inset" component="li" />
-            </React.Fragment>
+          {messages.map((item, i) => (
+            <ChatItem item={item} key={i} />
           ))}
         </List>
       </Paper>
+    </React.Fragment>
+  );
+}
+interface Props {
+  item: {
+    id: number;
+    person: string;
+    secondary: string;
+    primary: string;
+  };
+}
+function ChatItem({ item }: Props) {
+  // navigation routing
+  const navigate = useNavigate();
+  function onClick() {
+    navigate(`/discus/123`);
+  }
+
+  const { id, person, primary, secondary } = item;
+  return (
+    <React.Fragment>
+      {id === 1 && ( // < 5
+        <ListSubheader sx={{ bgcolor: "background.paper" }}>
+          Today
+        </ListSubheader>
+      )}
+      {id === 5 && ( //   > 5
+        <ListSubheader sx={{ bgcolor: "background.paper" }}>
+          Yesterday
+        </ListSubheader>
+      )}
+      <ListItemButton onClick={onClick}>
+        <ListItemAvatar>
+          <Avatar alt="Profile Picture" src={person} />
+        </ListItemAvatar>
+        <ListItemText primary={primary} secondary={secondary.slice(0, 30)} />
+      </ListItemButton>
+
+      <Divider variant="inset" component="li" />
     </React.Fragment>
   );
 }
@@ -152,13 +170,10 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
+  width: "100%",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
   },
 }));

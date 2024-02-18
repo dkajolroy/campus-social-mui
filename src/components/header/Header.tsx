@@ -1,5 +1,5 @@
 // import { Search } from "@mui/icons-material";
-import AdbIcon from "@mui/icons-material/Adb";
+import { Widgets } from "@mui/icons-material";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Badge } from "@mui/material";
@@ -12,6 +12,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { app } from "../../constants/config";
 import MessageDialog from "../dialog/MessageDialog";
 import MessageDrawer from "./MessageDrawer";
 import SearchInput from "./SearchInput";
@@ -32,7 +33,7 @@ export default function Header() {
   };
   function goMessage() {
     // goto message page
-    navigate("/message");
+    navigate("/discus");
     setAnchorEl(null);
   }
   function toggleDrawer() {
@@ -60,7 +61,7 @@ export default function Header() {
                 justifyContent: "space-between",
               }}
             >
-              <AdbIcon sx={{ display: { md: "flex" }, mr: 1 }} />
+              <Widgets sx={{ display: { md: "flex" }, mr: 1 }} />
               <Typography
                 variant="h6"
                 noWrap
@@ -74,7 +75,7 @@ export default function Header() {
                   textDecoration: "none",
                 }}
               >
-                LOGO
+                {app.appName.toUpperCase()}
               </Typography>
             </Box>
           </Link>
@@ -94,7 +95,7 @@ export default function Header() {
                 variant="outlined"
                 color="inherit"
                 key={page}
-                sx={{ my: 2, borderWidth: 1, color: "white", display: "block" }}
+                sx={{ borderWidth: 1, color: "white", display: "block" }}
               >
                 {page}
               </Button>

@@ -15,6 +15,7 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import React from "react";
+import { app } from "../../constants/config";
 
 interface Props {
   goMessage: () => void;
@@ -49,13 +50,25 @@ export default function MessageDialog(props: Props) {
             }}
           />
         </ListItemIcon>
-        <ListItemText primary="Go Messenger" />
+        <ListItemText
+          primary={
+            <Typography
+              variant="h2"
+              fontSize={16}
+              fontWeight={600}
+            >{`Go ${app.chatName}`}</Typography>
+          }
+        />
       </ListItemButton>
-      <Divider />
       {/* Message list */}
+      <Divider />
       <List
         subheader={
-          <ListSubheader component="div" id="nested-list-subheader">
+          <ListSubheader
+            sx={{ lineHeight: 3 }}
+            component="div"
+            id="nested-list-subheader"
+          >
             Latest messages
           </ListSubheader>
         }

@@ -12,48 +12,44 @@ export default function BottomToolbar() {
   }
 
   return (
-    <>
-      <Stack>
-        <AppBar
-          position="absolute"
-          elevation={2}
-          color="inherit"
-          sx={{ top: "auto", bottom: 0 }}
-        >
-          <Toolbar>
-            <Stack direction="row">
-              <InputEmoji
-                keepOpened={true}
-                theme="light"
-                inputClass="emoji-picker-input bottom-picker"
-                value={text}
-                onChange={setText}
-                cleanOnEnter
-                onEnter={handleOnEnter}
-                placeholder="Type a message"
-              />
+    <AppBar
+      position="sticky"
+      elevation={2}
+      color="inherit"
+      sx={{ top: "auto", bottom: 0 }}
+    >
+      <Toolbar className="!px-0">
+        <Stack direction="row" width="100%">
+          <InputEmoji
+            keepOpened={true}
+            theme="light"
+            inputClass="emoji-picker-input bottom-picker"
+            value={text}
+            onChange={setText}
+            cleanOnEnter
+            onEnter={handleOnEnter}
+            placeholder="Type a message"
+          />
 
-              <Button
-                sx={{
-                  borderColor: "lightgray",
-                  borderTopLeftRadius: 0,
-                  borderBottomLeftRadius: 0,
-                }}
-                onClick={handleOnEnter}
-                variant="outlined"
-                color="inherit"
-                startIcon={<SendIcon />}
-              >
-                Send
-              </Button>
-            </Stack>
-            <Box sx={{ flexGrow: 1 }} />
-            <IconButton color="inherit">
-              <Settings />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-      </Stack>
-    </>
+          <Button
+            sx={{
+              borderColor: "lightgray",
+              borderTopLeftRadius: 0,
+              borderBottomLeftRadius: 0,
+            }}
+            onClick={handleOnEnter}
+            variant="outlined"
+            color="inherit"
+            startIcon={<SendIcon />}
+          >
+            Send
+          </Button>
+        </Stack>
+        <Box sx={{ flexGrow: 1 }} />
+        <IconButton sx={{ mx: 1 }} color="inherit">
+          <Settings />
+        </IconButton>
+      </Toolbar>
+    </AppBar>
   );
 }

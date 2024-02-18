@@ -22,12 +22,9 @@ interface Props {
 }
 export default function MessageDrawer(props: Props) {
   const { openDrawer, toggleDrawer } = props;
-
   const [text, setText] = useState("");
-
-  function handleOnEnter() {
-    // use text message on enter
-  }
+  // use text message on enter
+  function handleOnEnter() {}
 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
@@ -46,7 +43,7 @@ export default function MessageDrawer(props: Props) {
       onOpen={toggleDrawer}
       sx={{ overflowY: "inherit" }}
     >
-      <Box width={340}>
+      <Box width={352}>
         {/* App bar header */}
         <AppBar position="static">
           <Stack
@@ -120,32 +117,30 @@ export default function MessageDrawer(props: Props) {
           sx={{ top: "auto", bottom: 0 }}
         >
           <Stack direction="row">
-            <>
-              <InputEmoji
-                keepOpened={true}
-                theme="light"
-                inputClass="emoji-picker-input drawer-picker"
-                value={text}
-                onChange={setText}
-                cleanOnEnter
-                onEnter={handleOnEnter}
-                placeholder="Type a message"
-              />
+            <InputEmoji
+              keepOpened={true}
+              theme="light"
+              inputClass="emoji-picker-input drawer-picker"
+              value={text}
+              onChange={setText}
+              cleanOnEnter
+              onEnter={handleOnEnter}
+              placeholder="Type a message"
+            />
 
-              <Button
-                sx={{
-                  borderColor: "lightgray",
-                  borderTopLeftRadius: 0,
-                  borderBottomLeftRadius: 0,
-                }}
-                onClick={handleOnEnter}
-                variant="outlined"
-                color="inherit"
-                startIcon={<SendIcon />}
-              >
-                Send
-              </Button>
-            </>
+            <Button
+              sx={{
+                borderColor: "lightgray",
+                borderTopLeftRadius: 0,
+                borderBottomLeftRadius: 0,
+              }}
+              onClick={handleOnEnter}
+              variant="outlined"
+              color="inherit"
+              startIcon={<SendIcon />}
+            >
+              Send
+            </Button>
           </Stack>
         </AppBar>
       </Box>
