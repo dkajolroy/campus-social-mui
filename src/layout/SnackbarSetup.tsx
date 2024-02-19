@@ -4,13 +4,15 @@ import { closeSnackbar } from "../slices/toggleSlice";
 import { RootStore } from "../store/store";
 
 export default function SnackbarSetup() {
-  const { snackbar } = useSelector((x: RootStore) => x.toggleState);
   const dispatch = useDispatch();
 
   function handleClose() {
     dispatch(closeSnackbar());
   }
 
+  const toggleState = useSelector((s: RootStore) => s.toggleState);
+  if (!toggleState) return;
+  const { snackbar } = toggleState;
   return (
     <Snackbar
       open={snackbar.open}

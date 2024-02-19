@@ -9,7 +9,6 @@ import { logout } from "../slices/authSlice";
 import { openSnackbar } from "../slices/toggleSlice";
 import { RootStore } from "../store/store";
 export default function RootLayout() {
-  const { user, token } = useSelector((s: RootStore) => s.authState);
   const [cookies] = useCookies([app.clientCookieName]);
 
   const dispatch = useDispatch();
@@ -21,6 +20,10 @@ export default function RootLayout() {
       dispatch(logout());
     }
   }, [cookies]);
+
+  const authState = useSelector((s: RootStore) => s.authState);
+  if (!authState) return;
+  const { user, token } = authState;
 
   if (!user || !token) {
     return <Navigate to="/sign-in" />;

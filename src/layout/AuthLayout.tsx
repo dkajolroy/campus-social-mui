@@ -11,8 +11,10 @@ import OAuthProviders from "../components/global/OAuthProviders";
 import { app } from "../constants/config";
 
 export default function AuthLayout() {
-  const { user, token } = useSelector((s: RootStore) => s.authState);
   const theme = useTheme();
+  const authState = useSelector((s: RootStore) => s.authState);
+  if (!authState) return;
+  const { user, token } = authState;
 
   // Authenticate middleware
   if (user && token) {

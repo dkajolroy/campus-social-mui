@@ -31,7 +31,6 @@ export default function SignUp() {
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = React.useState(false);
   const [terms, setTerms] = React.useState(false);
-  const { isLoading } = useSelector((s: RootStore) => s.authState);
 
   // Handle form submit
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -61,7 +60,9 @@ export default function SignUp() {
     // submit sign-up
     store.dispatch(signUp(data));
   };
-
+  const authState = useSelector((s: RootStore) => s.authState);
+  if (!authState) return;
+  const { isLoading } = authState;
   return (
     <Box flex={1} maxWidth={444} mx="auto">
       <CssBaseline />

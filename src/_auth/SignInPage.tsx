@@ -30,7 +30,6 @@ export default function SignInPage() {
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = React.useState(false);
-  const { isLoading } = useSelector((s: RootStore) => s.authState);
 
   // Handle form submit
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -51,7 +50,9 @@ export default function SignInPage() {
     // submit login
     store.dispatch(signIn(data));
   };
-
+  const authState = useSelector((s: RootStore) => s.authState);
+  if (!authState) return;
+  const { isLoading } = authState;
   return (
     <Box flex={1} maxWidth={444} mx="auto">
       <CssBaseline />
