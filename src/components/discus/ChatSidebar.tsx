@@ -98,7 +98,7 @@ export default function ChatSidebar() {
           </Search>
         </Toolbar>
 
-        <List sx={{ mb: 2 }}>
+        <List>
           {messages.map((item, i) => (
             <ChatItem item={item} key={i} />
           ))}

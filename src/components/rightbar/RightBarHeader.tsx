@@ -6,8 +6,14 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
+import { useSelector } from "react-redux";
+import { RootStore } from "../../store/store";
 
 export default function MediaCard() {
+  const authState = useSelector((xx: RootStore) => xx.authState);
+
+  if (!authState) return;
+  const { user } = authState;
   return (
     <Card sx={{ maxWidth: 345, position: "relative" }}>
       <CardMedia
@@ -16,8 +22,8 @@ export default function MediaCard() {
         title="green iguana"
       />
       <Avatar
-        alt="Remy Sharp"
-        src="https://mui.com/static/images/avatar/3.jpg"
+        alt={`${user?.firstName} ${user?.lastName}`}
+        src={user?.avatar}
         sx={{
           width: 100,
           height: 100,
@@ -29,7 +35,7 @@ export default function MediaCard() {
       />
       <CardContent sx={{ mt: "40px" }}>
         <Typography align="center" gutterBottom variant="h5" component="div">
-          Guru-vai
+          {`${user?.firstName} ${user?.lastName}`}
         </Typography>
         <Typography align="center" variant="body2" color="text.secondary">
           @username | 0 Follower | 0 Following

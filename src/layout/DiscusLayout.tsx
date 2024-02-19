@@ -2,7 +2,7 @@ import { Box, CssBaseline, Stack, SxProps, Theme } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Scrollbars from "react-custom-scrollbars-2";
 import { Outlet, useParams } from "react-router-dom";
-import ChatSidebar from "../components/sidebar/ChatSidebar";
+import ChatSidebar from "../components/discus/ChatSidebar";
 export default function DiscusLayout() {
   const isTablet = useMediaQuery("(max-width:768px)");
   const { discusId } = useParams();

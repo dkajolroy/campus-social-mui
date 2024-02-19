@@ -9,6 +9,7 @@ const persistConfig = {
   key: "root",
   storage,
   version: 1,
+  whitelist: ["authState"], // store only this key of state
   transforms: [
     encryptTransform({
       secretKey: app.secrete_key,
@@ -19,11 +20,11 @@ const persistConfig = {
     }),
   ],
 };
-const persistedReducer = persistReducer(persistConfig, reducer as any);
+const persistedReducer = persistReducer(persistConfig, reducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
-  devTools: process.env.NODE_ENV !== "production",
+  devTools: import.meta.env.DEV,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,

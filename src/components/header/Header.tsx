@@ -1,46 +1,20 @@
-// import { Search } from "@mui/icons-material";
-import { Widgets } from "@mui/icons-material";
-import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import { Badge } from "@mui/material";
+import { School } from "@mui/icons-material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { app } from "../../constants/config";
+import AppMenuDialog from "../dialog/AppMenuDialog";
 import MessageDialog from "../dialog/MessageDialog";
-import MessageDrawer from "./MessageDrawer";
+import NotificationDialog from "../dialog/NotificationDialog";
+import UserMenuDialog from "../dialog/UserMenuDialog";
 import SearchInput from "./SearchInput";
-import UserMenuDialog from "./UserMenuDialog";
 const pages = ["Feed", "Friends", "Video"];
 
 export default function Header() {
-  const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null); // dialog
-  const open = Boolean(anchorEl); //null or element => convert to boolean value
-  const [openDrawer, setOpenDrawer] = useState(false); // drawer
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    // close dialog
-    setAnchorEl(null);
-  };
-  function goMessage() {
-    // goto message page
-    navigate("/discus");
-    setAnchorEl(null);
-  }
-  function toggleDrawer() {
-    // open right drawer
-    setAnchorEl(null);
-    setOpenDrawer((s) => !s);
-  }
   return (
     <AppBar position="sticky">
       <Container maxWidth="xl">
@@ -61,7 +35,7 @@ export default function Header() {
                 justifyContent: "space-between",
               }}
             >
-              <Widgets sx={{ display: { md: "flex" }, mr: 1 }} />
+              <School sx={{ display: { md: "flex" }, mr: 1 }} />
               <Typography
                 variant="h6"
                 noWrap
@@ -114,32 +88,9 @@ export default function Header() {
           >
             {/* Icon buttons */}
             <Box>
-              <IconButton
-                onClick={handleClick}
-                size="large"
-                aria-label="show 4 new mails"
-                color="inherit"
-              >
-                <Badge badgeContent={4} color="error">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
-              <MessageDialog
-                anchorEl={anchorEl}
-                goMessage={goMessage}
-                handleClose={handleClose}
-                open={open}
-                toggleDrawer={toggleDrawer} //for open drawer
-              />
-              <IconButton
-                size="large"
-                aria-label="show 17 new notifications"
-                color="inherit"
-              >
-                <Badge badgeContent={17} color="error">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
+              <AppMenuDialog />
+              <MessageDialog />
+              <NotificationDialog />
             </Box>
             {/* User Menu */}
             <Box sx={{ flexGrow: 0 }}>
@@ -148,7 +99,6 @@ export default function Header() {
           </Box>
         </Toolbar>
       </Container>
-      <MessageDrawer toggleDrawer={toggleDrawer} openDrawer={openDrawer} />
     </AppBar>
   );
 }

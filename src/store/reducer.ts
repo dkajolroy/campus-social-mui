@@ -1,8 +1,8 @@
-import { combineReducers } from "@reduxjs/toolkit";
+import { combineSlices } from "@reduxjs/toolkit";
 import authSlice from "../slices/authSlice";
 import toggleSlice from "../slices/toggleSlice";
 
-const reducer = combineReducers({
+const reducer = combineSlices({
   authState: authSlice,
   toggleState: toggleSlice,
 });
