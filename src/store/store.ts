@@ -9,7 +9,7 @@ const persistConfig = {
   key: "root",
   storage,
   version: 1,
-  whitelist: ["authState"], // store only this key of state
+  whitelist: ["authState", "forgetState"], // store only this key of state
   transforms: [
     encryptTransform({
       secretKey: app.secrete_key,

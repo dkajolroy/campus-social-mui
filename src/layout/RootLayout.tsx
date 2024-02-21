@@ -6,7 +6,6 @@ import { Navigate, Outlet } from "react-router-dom";
 import Header from "../components/header/Header";
 import { app } from "../constants/config";
 import { logout } from "../slices/authSlice";
-import { openSnackbar } from "../slices/toggleSlice";
 import { RootStore } from "../store/store";
 export default function RootLayout() {
   const [cookies] = useCookies([app.clientCookieName]);
@@ -14,9 +13,6 @@ export default function RootLayout() {
   const dispatch = useDispatch();
   useEffect(() => {
     if (!cookies[app.clientCookieName]) {
-      dispatch(
-        openSnackbar({ mode: "error", message: "You are not authenticate !" })
-      );
       dispatch(logout());
     }
   }, [cookies]);
@@ -26,7 +22,7 @@ export default function RootLayout() {
   const { user, token } = authState;
 
   if (!user || !token) {
-    return <Navigate to="/sign-in" />;
+    return <Navigate to="/auth/sign-in" />;
   } else {
     return (
       <Box bgcolor="whitesmoke" minHeight="100vh" position="relative">

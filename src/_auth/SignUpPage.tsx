@@ -178,7 +178,7 @@ export default function SignUp() {
           </Button>
           <Grid container justifyContent="center" gap={1}>
             <Typography fontSize={14}>Already have an account?</Typography>
-            <Link className="text-blue-500" to="/sign-in">
+            <Link className="text-blue-500" to="/auth/sign-in">
               <Typography fontSize={14} sx={{ color: palette.primary.main }}>
                 Sign in
               </Typography>

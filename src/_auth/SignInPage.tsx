@@ -119,7 +119,7 @@ export default function SignInPage() {
               />
             </Grid>
             <Grid item>
-              <Link to="/forget">
+              <Link to="/auth/forget">
                 <Typography fontSize={14} sx={{ color: palette.primary.main }}>
                   Forgot password?
                 </Typography>
@@ -140,7 +140,7 @@ export default function SignInPage() {
           </Button>
           <Grid container justifyContent="center" gap={1}>
             <Typography fontSize={14}>New on our platform?</Typography>
-            <Link to="/sign-up">
+            <Link to="/auth/sign-up">
               <Typography fontSize={14} sx={{ color: palette.primary.main }}>
                 Create an account
               </Typography>

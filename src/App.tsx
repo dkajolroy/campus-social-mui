@@ -1,16 +1,17 @@
-import { Box, Typography } from "@mui/material";
-import Lottie from "lottie-react";
 import "react-multi-carousel/lib/styles.css";
 import { Route, Routes } from "react-router-dom";
+import ChangePassPage from "./_auth/ChangePassPage";
 import ForgetPage from "./_auth/ForgetPage";
+import OTPage from "./_auth/OTPage";
 import SignInPage from "./_auth/SignInPage";
 import SignUpPage from "./_auth/SignUpPage";
-import { icons } from "./constants/icons";
 import AuthLayout from "./layout/AuthLayout";
 import DiscusLayout from "./layout/DiscusLayout";
+import ForgetLayout from "./layout/ForgetLayout";
 import RootLayout from "./layout/RootLayout";
 import ScrollTop from "./layout/ScrollTop";
 import SnackbarSetup from "./layout/SnackbarSetup";
+import DiscusNotSelect from "./pages/DiscusNotSelect";
 import DiscusPage from "./pages/DiscusPage";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -39,28 +40,21 @@ export default function App() {
           </Route>
           {/* Public Route */}
           <Route Component={AuthLayout}>
-            <Route path="/sign-in" element={<SignInPage />} />
-            <Route path="/sign-up" element={<SignUpPage />} />
-            <Route path="/forget" element={<ForgetPage />} />
+            <Route path="/auth/sign-in" element={<SignInPage />} />
+            <Route path="/auth/sign-up" element={<SignUpPage />} />
+            <Route path="/auth/forget" element={<ForgetPage />} />
+            <Route element={<ForgetLayout />}>
+              <Route path="/auth/forget/otp" element={<OTPage />} />
+              <Route
+                path="/auth/forget/password"
+                element={<ChangePassPage />}
+              />
+            </Route>
           </Route>
           {/* Global Route */}
           <Route path="/*" element={<NotFoundPage />} />
         </Routes>
       </ReduxProvider>
     </ThemeProvider>
-  );
-}
-function DiscusNotSelect() {
-  return (
-    <Box
-      justifyContent="center"
-      minHeight="100%"
-      display="flex"
-      alignItems="center"
-      flexDirection="column"
-    >
-      <Lottie className="w-52" animationData={icons.sendLottie} loop />
-      <Typography>Not Chat Selected</Typography>
-    </Box>
   );
 }

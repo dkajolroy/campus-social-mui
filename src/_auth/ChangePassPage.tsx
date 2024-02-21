@@ -1,5 +1,13 @@
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { Chip, CircularProgress, Divider, useTheme } from "@mui/material";
+import {
+  Chip,
+  CircularProgress,
+  Divider,
+  IconButton,
+  InputAdornment,
+  useTheme,
+} from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -9,17 +17,20 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import OAuthProviders from "../components/global/OAuthProviders";
 import { app } from "../constants/config";
-import { forgetReqApi } from "../slices/forgetSlice";
+import { forgetSuccessApi, resetForget } from "../slices/forgetSlice";
 import { openSnackbar } from "../slices/toggleSlice";
 import { RootStore, store } from "../store/store";
 
-export default function ForgetPage() {
+export default function ForgetPassPage() {
+  const [showPassword, setShowPassword] = React.useState(false);
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [search] = useSearchParams();
+  const key = search.get("key"); // for email link
   const forgetState = useSelector((xx: RootStore) => xx.forgetState);
 
   // Handle form submit
@@ -27,21 +38,27 @@ export default function ForgetPage() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const inputData = {
-      email: formData.get("email"),
+      password: formData.get("password"),
+      confirmPassword: formData.get("confirmPassword"),
     };
-    if (!inputData.email?.toString().trim().length)
+    if (!inputData.password?.toString().trim().length)
       return dispatch(
         openSnackbar({
           message: "Enter your email !",
           mode: "error",
         })
       );
-    // submit to
     store.dispatch(
-      forgetReqApi({
-        inputData,
+      forgetSuccessApi({
+        inputData: {
+          password: String(inputData.password),
+          key, // for verification link
+          email: forgetState?.email, // for find user
+          otp: String(forgetState?.otp), // for otp
+        },
         callback() {
-          navigate("/auth/forget/otp");
+          dispatch(resetForget());
+          navigate("/auth/sign-in");
         },
       })
     );
@@ -72,23 +89,60 @@ export default function ForgetPage() {
             size="small"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="password"
+            label="New Password"
+            name="password"
             autoFocus
+            type={showPassword ? "text" : "password"}
+            InputProps={{
+              sx: { padding: 0 },
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() => setShowPassword((s) => !s)}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            margin="normal"
+            size="small"
+            required
+            fullWidth
+            id="confirmPassword"
+            label="Confirm Password "
+            name="confirmPassword"
+            autoComplete="Confirm Password"
+            type={showPassword ? "text" : "password"}
+            InputProps={{
+              sx: { padding: 0 },
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() => setShowPassword((s) => !s)}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <Button
-            disabled={forgetState?.isLoading}
             type="submit"
             fullWidth
+            disabled={forgetState?.isLoading}
             variant="contained"
             sx={{ mt: 1, mb: 2 }}
           >
             {forgetState?.isLoading && (
               <CircularProgress sx={{ mr: 1 }} size={16} color="inherit" />
             )}
-            Next
+            Forget
           </Button>
           <Grid container justifyContent="center" gap={1}>
             <Typography fontSize={14}>New on our platform?</Typography>
