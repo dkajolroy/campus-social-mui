@@ -34,7 +34,7 @@ export default function ForgetPassPage() {
   const forgetState = useSelector((xx: RootStore) => xx.forgetState);
 
   // Handle form submit
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const inputData = {

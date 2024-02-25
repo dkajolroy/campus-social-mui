@@ -12,10 +12,31 @@ import {
 } from "@mui/material";
 import { red } from "@mui/material/colors";
 import { useState } from "react";
+import { axiosInstance } from "../../utils/service";
 
 export default function CreatePost() {
-  // open backdrop
+  // open loading backdrop
   const [open, setOpen] = useState(false);
+  const formData = new FormData();
+  function onChangeFiles(files: FileList | null) {
+    if (files?.length) {
+      for (var i = 0; i < files.length; i++) {
+        formData.append("images", files[i]);
+      }
+    }
+  }
+  console.log(formData.get("images"));
+
+  // create post
+  function createPost() {
+    const res = axiosInstance.post("/api/post/create", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+      onUploadProgress(progressEvent) {
+        console.log(progressEvent);
+      },
+    });
+  }
+
   return (
     <Box p={2}>
       <Stack
@@ -67,7 +88,10 @@ export default function CreatePost() {
                 startIcon={<CloudUploadIcon />}
               >
                 Upload Image
-                <VisuallyHiddenInput type="file" />
+                <VisuallyHiddenInput
+                  onChange={({ target }) => onChangeFiles(target.files)}
+                  type="file"
+                />
               </Button>
               <Button
                 component="label"
@@ -79,7 +103,13 @@ export default function CreatePost() {
               </Button>
             </Stack>
             <Stack spacing={1} mt={{ sm: 0, xs: 1 }}>
-              <Button onClick={() => setOpen(true)} variant="contained">
+              <Button
+                onClick={() => {
+                  createPost();
+                  setOpen(true);
+                }}
+                variant="contained"
+              >
                 Create Post
               </Button>
             </Stack>

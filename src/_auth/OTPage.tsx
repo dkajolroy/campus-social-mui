@@ -25,7 +25,7 @@ export default function OTPage() {
   const [otp, setOtp] = React.useState("");
 
   // Handle form submit
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (otp.trim().length < 4)
       return dispatch(
         openSnackbar({
