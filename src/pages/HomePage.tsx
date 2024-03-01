@@ -1,3 +1,4 @@
+import { axiosInstance } from "@/utils/service";
 import { Box, Button, Container, Grid, SxProps, Theme } from "@mui/material";
 import Carousel from "react-multi-carousel";
 import ActiveFollowers from "../components/feed/ActiveFollowers";
@@ -5,7 +6,6 @@ import CreatePost from "../components/post/CreatePost";
 import Post from "../components/post/Post";
 import RightBar from "../components/rightbar/RightBar";
 import Sidebar from "../components/sidebar/Sidebar";
-import { axiosInstance } from "../utils/service";
 
 export default function HomePage() {
   async function demo() {

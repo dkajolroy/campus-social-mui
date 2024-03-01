@@ -1,10 +1,16 @@
+import { addPost } from "@/slices/postSlice";
+import { openSnackbar } from "@/slices/toggleSlice";
+import { RootStore, store } from "@/store/store";
+import { ImageOutlined, VideocamOutlined } from "@mui/icons-material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import {
   Avatar,
-  Backdrop,
   Box,
   Button,
-  CircularProgress,
+  ImageList,
+  ImageListItem,
+  LinearProgress,
+  LinearProgressProps,
   Stack,
   TextareaAutosize,
   Typography,
@@ -12,29 +18,73 @@ import {
 } from "@mui/material";
 import { red } from "@mui/material/colors";
 import { useState } from "react";
-import { axiosInstance } from "../../utils/service";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function CreatePost() {
   // open loading backdrop
-  const [open, setOpen] = useState(false);
-  const formData = new FormData();
-  function onChangeFiles(files: FileList | null) {
+  const [blob, setBlob] = useState({
+    text: "",
+    images: [] as string[],
+    videos: [] as string[],
+  });
+  const [data, setData] = useState({
+    text: "",
+    images: [] as File[],
+    videos: [] as File[],
+  });
+  // onchange text
+  function onChangeText(text: string) {
+    setBlob((s) => ({ ...s, text }));
+    setData((s) => ({ ...s, text }));
+  }
+  // onchange image
+  function onChangeImages(files: FileList | null) {
+    setBlob((s) => ({ ...s, images: [] }));
     if (files?.length) {
       for (var i = 0; i < files.length; i++) {
-        formData.append("images", files[i]);
+        const file = files[i];
+        const img = URL.createObjectURL(file);
+        setBlob((s) => ({ ...s, images: [...s.images, img] }));
+        setData((s) => ({ ...s, images: [...s.images, file] }));
       }
     }
   }
-  console.log(formData.get("images"));
+  // onchange video
+  function onChangeVideos(files: FileList | null) {
+    setBlob((s) => ({ ...s, videos: [] }));
+    if (files?.length) {
+      for (var i = 0; i < files.length; i++) {
+        const file = files[i];
+        const video = URL.createObjectURL(file);
+        setBlob((s) => ({ ...s, videos: [...s.videos, video] }));
+        setData((s) => ({ ...s, videos: [...s.videos, file] }));
+      }
+    }
+  }
+  // submit post
+  const formData = new FormData();
+  const postRes = useSelector((ss: RootStore) => ss.postState);
+  const dispatch = useDispatch();
+  async function submitPost() {
+    // data validation
+    if (!blob.text.trim() && !blob.images.length && !blob.videos.length) {
+      return dispatch(
+        openSnackbar({
+          message: "Enter post content please !",
+          mode: "error",
+        })
+      );
+    }
 
-  // create post
-  function createPost() {
-    const res = axiosInstance.post("/api/post/create", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-      onUploadProgress(progressEvent) {
-        console.log(progressEvent);
-      },
+    formData.append(`text`, data.text);
+    data.images.forEach((images, _) => {
+      formData.append(`images`, images);
     });
+    data.videos.forEach((video, _) => {
+      formData.append(`videos`, video);
+    });
+    store.dispatch(addPost(formData));
+    setBlob({ images: [], videos: [], text: "" });
   }
 
   return (
@@ -62,6 +112,8 @@ export default function CreatePost() {
           <TextareaAutosize
             aria-label="minimum height"
             minRows={2}
+            value={blob.text}
+            onChange={({ target }) => onChangeText(target.value)}
             style={{
               borderWidth: 1,
               borderRadius: 5,
@@ -70,6 +122,26 @@ export default function CreatePost() {
             }}
             placeholder="What's on your mind ?"
           />
+          <Stack sx={{ maxHeight: 200 }}>
+            <ImageList variant="masonry" cols={3} gap={8}>
+              {blob.images.map((item, i) => (
+                <ImageListItem sx={{ position: "relative" }} key={i}>
+                  <Box position="absolute" top={0} left={0}>
+                    <ImageOutlined sx={{ color: "white" }} />
+                  </Box>
+                  <img src={`${item}`} alt="image" loading="lazy" />
+                </ImageListItem>
+              ))}
+              {blob.videos.map((item, i) => (
+                <ImageListItem sx={{ position: "relative" }} key={i}>
+                  <Box position="absolute" top={0} left={0}>
+                    <VideocamOutlined sx={{ color: "white" }} />
+                  </Box>
+                  <video src={`${item}`} autoPlay muted />
+                </ImageListItem>
+              ))}
+            </ImageList>
+          </Stack>
           {/* Form Action */}
           <Stack
             spacing={1}
@@ -89,7 +161,12 @@ export default function CreatePost() {
               >
                 Upload Image
                 <VisuallyHiddenInput
-                  onChange={({ target }) => onChangeFiles(target.files)}
+                  onChange={({ target }) => {
+                    onChangeImages(target.files);
+                    target.value = "";
+                  }}
+                  accept="image/*"
+                  multiple
                   type="file"
                 />
               </Button>
@@ -99,14 +176,21 @@ export default function CreatePost() {
                 startIcon={<CloudUploadIcon />}
               >
                 Upload Video
-                <VisuallyHiddenInput type="file" />
+                <VisuallyHiddenInput
+                  onChange={({ target }) => {
+                    onChangeVideos(target.files);
+                    target.value = "";
+                  }}
+                  multiple
+                  accept="video/*"
+                  type="file"
+                />
               </Button>
             </Stack>
             <Stack spacing={1} mt={{ sm: 0, xs: 1 }}>
               <Button
                 onClick={() => {
-                  createPost();
-                  setOpen(true);
+                  submitPost();
                 }}
                 variant="contained"
               >
@@ -114,18 +198,10 @@ export default function CreatePost() {
               </Button>
             </Stack>
           </Stack>
+          {postRes?.isAddLoading && (
+            <LinearProgressWithLabel value={postRes.addPercent} />
+          )}
         </Stack>
-        {/* BackDrop From */}
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={open}
-          onClick={() => setOpen(false)}
-        >
-          <Stack direction="column" alignItems="center">
-            <Typography>Only design this</Typography>
-            <CircularProgress color="inherit" />
-          </Stack>
-        </Backdrop>
       </Stack>
     </Box>
   );
@@ -143,3 +219,20 @@ const VisuallyHiddenInput = styled("input")({
   whiteSpace: "nowrap",
   width: 1,
 });
+
+function LinearProgressWithLabel(
+  props: LinearProgressProps & { value: number }
+) {
+  return (
+    <Box sx={{ display: "flex", alignItems: "center" }}>
+      <Box sx={{ width: "100%", mr: 1 }}>
+        <LinearProgress variant="determinate" {...props} />
+      </Box>
+      <Box sx={{ minWidth: 35 }}>
+        <Typography variant="body2" color="text.secondary">{`${Math.round(
+          props.value
+        )}%`}</Typography>
+      </Box>
+    </Box>
+  );
+}

@@ -1,3 +1,4 @@
+import ThemeProvider from "@/provider/ThemeProvider";
 import "react-multi-carousel/lib/styles.css";
 import { Route, Routes } from "react-router-dom";
 import ChangePassPage from "./_auth/ChangePassPage";
@@ -17,7 +18,6 @@ import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ProfilePage from "./pages/ProfilePage";
 import ReduxProvider from "./provider/ReduxProvider";
-import ThemeProvider from "./provider/ThemeProvider";
 
 export default function App() {
   return (
