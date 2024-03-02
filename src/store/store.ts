@@ -34,4 +34,4 @@ export const store = configureStore({
 
 export const persistedStore = persistStore(store);
 
-export type RootStore = ReturnType<typeof store.getState>;
+export type RootStore = ReturnType<typeof reducer>;

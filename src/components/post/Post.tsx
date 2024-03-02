@@ -10,7 +10,6 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  CardMedia,
   IconButton,
   Menu,
   Typography,
@@ -23,7 +22,7 @@ import Paper from "@mui/material/Paper";
 import { red } from "@mui/material/colors";
 import React from "react";
 
-export default function Post({ item }: { item: number }) {
+export default function Post({ item }: { item: IPost }) {
   return (
     <Card sx={{ my: 2, position: "relative" }}>
       <CardHeader
@@ -40,17 +39,24 @@ export default function Post({ item }: { item: number }) {
         title="Shrimp and Chorizo Paella"
         subheader="September 14, 2016"
       />
-      <CardMedia
-        component="img"
-        height="194"
-        image="https://mui.com/static/images/cards/paella.jpg"
-        alt="Paella dish"
-      />
+      <div className="max-h-[200px] flex flex-wrap">
+        {item.images.map((xx, ii) => {
+          const len = item.images.length;
+          return (
+            <img
+              key={ii}
+              className={`object-cover ${
+                len <= 2 ? "w-full" : len < 5 ? "w-2/4" : "w-2/6"
+              }`}
+              src={xx.secure_url}
+              alt="Paella dish"
+            />
+          );
+        })}
+      </div>
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the
-          mussels, if you like.{item}
+          {item.text}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>

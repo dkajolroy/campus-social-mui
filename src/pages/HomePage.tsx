@@ -1,19 +1,41 @@
+import ActiveFollowers from "@/components/feed/ActiveFollowers";
+import CreatePost from "@/components/post/CreatePost";
+import Post from "@/components/post/Post";
+import RightBar from "@/components/rightbar/RightBar";
+import Sidebar from "@/components/sidebar/Sidebar";
 import { axiosInstance } from "@/utils/service";
-import { Box, Button, Container, Grid, SxProps, Theme } from "@mui/material";
+import { Box, Container, Grid, SxProps, Theme } from "@mui/material";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 import Carousel from "react-multi-carousel";
-import ActiveFollowers from "../components/feed/ActiveFollowers";
-import CreatePost from "../components/post/CreatePost";
-import Post from "../components/post/Post";
-import RightBar from "../components/rightbar/RightBar";
-import Sidebar from "../components/sidebar/Sidebar";
 
 export default function HomePage() {
-  async function demo() {
-    // for test protect route
-    const { data } = await axiosInstance.get("/api/posts");
-    console.log(data);
-    console.log("data");
-  }
+  const fetchData = async ({ pageParam = 0 }) => {
+    const { data } = await axiosInstance.get(`/api/post/all`);
+    return data as IPost[];
+  };
+  const { data, error, fetchNextPage, isFetching } = useInfiniteQuery({
+    queryKey: ["post"],
+    refetchOnWindowFocus: false,
+    queryFn: fetchData,
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
+      // lastPage data length[]
+      // allPages page length[]
+      return lastPageParam + 1;
+    },
+  });
+  // all Post
+  const postList = data?.pages[0];
+
+  // Load more data
+  const { ref, inView } = useInView();
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView]);
 
   return (
     <Container maxWidth="xl">
@@ -27,7 +49,6 @@ export default function HomePage() {
           display={{ xs: "none", sm: "block" }}
         >
           <Box sx={sidebarBoxSx}>
-            <Button onClick={demo}>OK</Button>
             <Sidebar />
           </Box>
         </Grid>
@@ -80,10 +101,11 @@ export default function HomePage() {
               <CreatePost />
             </Box>
             <Box sx={{ px: { xs: 0, lg: 5 } }}>
-              {[...Array.from("123456789").keys()].map((item, index) => {
+              {postList?.map((item, index) => {
                 return <Post key={index} item={item} />;
               })}
             </Box>
+            <div ref={ref}>{isFetching ? "Processing..." : "Load more"}</div>
           </Box>
         </Grid>
         {/* Grid items 3 for right-bar */}
