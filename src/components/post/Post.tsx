@@ -20,7 +20,9 @@ import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
 import Paper from "@mui/material/Paper";
 import { red } from "@mui/material/colors";
+import moment from "moment";
 import React from "react";
+import MediaList from "./MediaList";
 
 export default function Post({ item }: { item: IPost }) {
   return (
@@ -28,37 +30,26 @@ export default function Post({ item }: { item: IPost }) {
       <CardHeader
         avatar={
           <Avatar
-            src="https://mui.com/static/images/avatar/3.jpg"
+            src={item.author?.avatar.secure_url}
             sx={{ bgcolor: red[500] }}
             aria-label="recipe"
           >
-            R
+            {item.author?.firstName}
           </Avatar>
         }
         action={<MenuOption />}
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
+        title={`${item.author?.firstName} ${item.author?.lastName}`}
+        subheader={moment(item.createdAt).fromNow()}
       />
-      <div className="max-h-[200px] flex flex-wrap">
-        {item.images.map((xx, ii) => {
-          const len = item.images.length;
-          return (
-            <img
-              key={ii}
-              className={`object-cover ${
-                len <= 2 ? "w-full" : len < 5 ? "w-2/4" : "w-2/6"
-              }`}
-              src={xx.secure_url}
-              alt="Paella dish"
-            />
-          );
-        })}
-      </div>
+
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          {item.text}
+          {item.caption}
         </Typography>
       </CardContent>
+      <div className="max-h-[450px] overflow-hidden flex">
+        <MediaList media={item.media} />
+      </div>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
           <FavoriteIcon />

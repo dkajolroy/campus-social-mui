@@ -1,4 +1,11 @@
-import { Telegram } from "@mui/icons-material";
+import { icons } from "@/constants/icons";
+import { useSocket } from "@/provider/SocketProvider";
+import {
+  useDeliveryMsgMutation,
+  useGetConversationQuery,
+} from "@/query/message_query";
+import { RootStore } from "@/store/store";
+import { KeyboardDoubleArrowRight } from "@mui/icons-material";
 import MailIcon from "@mui/icons-material/Mail";
 import {
   Badge,
@@ -17,6 +24,7 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { app } from "../../constants/config";
 import MessageDrawer from "../drawer/MessageDrawer";
@@ -25,7 +33,25 @@ export default function MessageDialog() {
   // const { anchorEl, goMessage, toggleDrawer, handleClose, open } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  // Messages notify
+  const { data, refetch } = useGetConversationQuery({ limit: 20 });
+  const { user } = useSelector((sx: RootStore) => sx.authState);
+  const totalUnread =
+    data &&
+    data.filter((msg) => {
+      if (msg.last_msg && msg.last_msg.sender) {
+        return (
+          msg.last_msg.sender._id !== user?._id && !msg.last_msg?.delivered
+        );
+      }
+    });
+  const [sendToDelivery] = useDeliveryMsgMutation();
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    if (totalUnread) {
+      const msg = totalUnread.map((x) => x.last_msg?._id);
+      sendToDelivery({ messages: msg });
+    }
     setAnchorEl(event.currentTarget);
   };
   // const dispatch = useDispatch();
@@ -44,6 +70,15 @@ export default function MessageDialog() {
     setAnchorEl(null);
     setOpenDrawer((s) => !s);
   }
+
+  // Realtime change notify
+  const { socket } = useSocket();
+  React.useEffect(() => {
+    socket.on("new_message", () => {
+      refetch();
+    });
+  }, []);
+
   return (
     <>
       <IconButton
@@ -52,9 +87,16 @@ export default function MessageDialog() {
         aria-label="show 4 new mails"
         color="inherit"
       >
-        <Badge badgeContent={4} color="error">
+        {!totalUnread ? (
           <MailIcon />
-        </Badge>
+        ) : (
+          <Badge
+            badgeContent={totalUnread.length < 20 ? totalUnread.length : "20+"}
+            color="error"
+          >
+            <MailIcon />
+          </Badge>
+        )}
       </IconButton>
       <Menu
         id="fade-menu"
@@ -68,15 +110,10 @@ export default function MessageDialog() {
       >
         <ListItemButton onClick={goMessage}>
           <ListItemIcon>
-            <Telegram
-              fontSize="medium"
-              sx={{
-                bgcolor: "lightgray",
-                height: 40,
-                width: 40,
-                p: 0.5,
-                borderRadius: "50%",
-              }}
+            <Avatar
+              sx={{ borderWidth: 1, borderColor: "primary" }}
+              src={icons.dIcon}
+              alt="icon"
             />
           </ListItemIcon>
           <ListItemText
@@ -87,7 +124,9 @@ export default function MessageDialog() {
                 fontWeight={600}
               >{`Go ${app.chatName}`}</Typography>
             }
+            secondary="Go to your inbox hare"
           />
+          <KeyboardDoubleArrowRight color="action" />
         </ListItemButton>
         {/* Message list */}
         <Divider />

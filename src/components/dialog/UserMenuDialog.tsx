@@ -1,3 +1,4 @@
+import { conversationQuery } from "@/query/conversation_query";
 import Logout from "@mui/icons-material/Logout";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
@@ -21,6 +22,7 @@ export default function UserMenuDialog() {
   };
 
   function handleLogout() {
+    dispatch(conversationQuery.util.resetApiState())
     dispatch(logout());
     handleClose();
   }

@@ -34,11 +34,10 @@ export default function DiscusLayout() {
             </Box>
           </Box>
           <Box
-            className="max-h-[calc(100vh-64px)] overflow-y-auto"
+            className="h-[calc(100vh-64px)] overflow-y-auto"
             display={isTablet && !discusId ? "none" : "block"}
             sx={{
               width: "100%",
-              height: "100",
               position: "relative",
             }}
           >

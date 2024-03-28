@@ -23,7 +23,7 @@ export default function MediaCard() {
       />
       <Avatar
         alt={`${user?.firstName} ${user?.lastName}`}
-        src={user?.avatar}
+        src={user?.avatar.secure_url}
         sx={{
           width: 100,
           height: 100,

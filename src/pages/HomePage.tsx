@@ -3,39 +3,35 @@ import CreatePost from "@/components/post/CreatePost";
 import Post from "@/components/post/Post";
 import RightBar from "@/components/rightbar/RightBar";
 import Sidebar from "@/components/sidebar/Sidebar";
-import { axiosInstance } from "@/utils/service";
+import PostSkeleton from "@/components/skeleton/PostSkeleton";
+import { useSocket } from "@/provider/SocketProvider";
+import { useGetFriendsQuery } from "@/query/friends_query";
+import { useGetPostQuery } from "@/query/post_query";
 import { Box, Container, Grid, SxProps, Theme } from "@mui/material";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import Carousel from "react-multi-carousel";
 
 export default function HomePage() {
-  const fetchData = async ({ pageParam = 0 }) => {
-    const { data } = await axiosInstance.get(`/api/post/all`);
-    return data as IPost[];
-  };
-  const { data, error, fetchNextPage, isFetching } = useInfiniteQuery({
-    queryKey: ["post"],
-    refetchOnWindowFocus: false,
-    queryFn: fetchData,
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
-      // lastPage data length[]
-      // allPages page length[]
-      return lastPageParam + 1;
-    },
-  });
-  // all Post
-  const postList = data?.pages[0];
+  const [limit, setLimit] = useState(20);
+  const { isLoading, isFetching, data } = useGetPostQuery({ limit });
 
   // Load more data
   const { ref, inView } = useInView();
   useEffect(() => {
-    if (inView) {
-      fetchNextPage();
+    if (inView && data && data.length >= limit) {
+      setLimit((s) => s + 20);
     }
   }, [inView]);
+
+  // online friends
+  const friends = useGetFriendsQuery();
+  const { onlineUser } = useSocket();
+  // console.log(onlineUser);
+  // console.log(online);
+  const onlineFriends = friends.data?.filter((x) => {
+    return onlineUser.find((xx) => xx.user_id === x.user._id);
+  });
 
   return (
     <Container maxWidth="xl">
@@ -55,42 +51,44 @@ export default function HomePage() {
         {/* Grid items 2 for post scroll */}
         <Grid item xs={12} sm={8} md={6}>
           <Box display="flex" mt={`${centerTop}px`} flexDirection="column">
-            <Box
-              mb={2}
-              bgcolor="background.paper"
-              py={1}
-              px={1}
-              borderRadius={1}
-              gap={1}
-              position="relative"
-            >
-              <Carousel
-                additionalTransfrom={0}
-                arrows
-                centerMode={false}
-                containerClass="container"
-                draggable
-                focusOnSelect={false}
-                infinite={false}
-                keyBoardControl
-                minimumTouchDrag={80}
-                renderArrowsWhenDisabled={false}
-                renderButtonGroupOutside={false}
-                renderDotsOutside={false}
-                responsive={responsive}
-                rewind={false}
-                rewindWithAnimation={false}
-                rtl={false}
-                shouldResetAutoplay
-                showDots={false}
-                slidesToSlide={5}
-                swipeable
+            {onlineFriends && onlineFriends.length ? (
+              <Box
+                mb={2}
+                bgcolor="background.paper"
+                py={1}
+                px={1}
+                borderRadius={1}
+                gap={1}
+                position="relative"
               >
-                {dummy.map((ur, index) => {
-                  return <ActiveFollowers item={ur} key={index} />;
-                })}
-              </Carousel>
-            </Box>
+                <Carousel
+                  additionalTransfrom={0}
+                  arrows
+                  centerMode={false}
+                  containerClass="container"
+                  draggable
+                  focusOnSelect={false}
+                  infinite={false}
+                  keyBoardControl
+                  minimumTouchDrag={80}
+                  renderArrowsWhenDisabled={false}
+                  renderButtonGroupOutside={false}
+                  renderDotsOutside={false}
+                  responsive={responsive}
+                  rewind={false}
+                  rewindWithAnimation={false}
+                  rtl={false}
+                  shouldResetAutoplay
+                  showDots={false}
+                  slidesToSlide={5}
+                  swipeable
+                >
+                  {onlineFriends.map((xxx, index) => {
+                    return <ActiveFollowers item={xxx.user} key={index} />;
+                  })}
+                </Carousel>
+              </Box>
+            ) : null}
             <Box
               sx={{
                 width: "100%",
@@ -101,11 +99,17 @@ export default function HomePage() {
               <CreatePost />
             </Box>
             <Box sx={{ px: { xs: 0, lg: 5 } }}>
-              {postList?.map((item, index) => {
+              {isLoading &&
+                Array.from({ length: 5 }).map((_, i) => (
+                  <PostSkeleton key={i} />
+                ))}
+              {data?.map((item, index) => {
                 return <Post key={index} item={item} />;
               })}
             </Box>
-            <div ref={ref}>{isFetching ? "Processing..." : "Load more"}</div>
+            <div ref={ref} className="flex justify-center">
+              <span>{isFetching ? "Processing..." : "Load more"}</span>
+            </div>
           </Box>
         </Grid>
         {/* Grid items 3 for right-bar */}

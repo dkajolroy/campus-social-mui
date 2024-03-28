@@ -1,14 +1,22 @@
+import { useSendMessageToRoomMutation } from "@/query/message_query";
 import { Settings } from "@mui/icons-material";
 import SendIcon from "@mui/icons-material/Send";
 import { AppBar, Box, Button, IconButton, Stack, Toolbar } from "@mui/material";
 import { useState } from "react";
 import InputEmoji from "react-input-emoji";
+import { useParams } from "react-router-dom";
 
 export default function BottomToolbar() {
   const [text, setText] = useState("");
+  const { discusId } = useParams();
+  const [sendMessage] = useSendMessageToRoomMutation();
 
   function handleOnEnter() {
     // use text message on enter
+    if (discusId && text) {
+      sendMessage({ receiver: discusId, text });
+      setText("");
+    }
   }
 
   return (
@@ -32,6 +40,7 @@ export default function BottomToolbar() {
           />
 
           <Button
+            size="small"
             sx={{
               borderColor: "lightgray",
               borderTopLeftRadius: 0,

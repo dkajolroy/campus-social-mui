@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import Badge from "@mui/material/Badge";
 
-export default function ActiveFollowers({ item }: { item: string }) {
+export default function ActiveFollowers({ item }: { item: User }) {
   const buttons = [
     <Button key="one">Follow</Button>,
     <Button key="two">View</Button>,
@@ -23,13 +23,10 @@ export default function ActiveFollowers({ item }: { item: string }) {
     <HtmlTooltip
       title={
         <Stack direction="row" p={1} gap={1}>
-          <Avatar
-            alt="Profile Picture"
-            src="https://mui.com/static/images/avatar/5.jpg"
-          />
+          <Avatar alt={item.firstName} src={item.avatar.secure_url} />
           <Box>
             <Typography fontSize={18} variant="h2" fontWeight="700">
-              This Name
+              {`${item.firstName} ${item.lastName}`}
             </Typography>
             <Box>
               <Typography
@@ -64,7 +61,7 @@ export default function ActiveFollowers({ item }: { item: string }) {
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         variant="dot"
       >
-        <Avatar alt="Remy Sharp" src={item} />
+        <Avatar alt={item.firstName} src={item.avatar.secure_url} />
       </StyledBadge>
     </HtmlTooltip>
   );

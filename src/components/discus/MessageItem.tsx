@@ -6,9 +6,16 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import moment from "moment";
 
-export default function MessageItem({ item }: { item: string }) {
-  const myText = item === "a";
+export default function MessageItem({
+  item,
+  user,
+}: {
+  item: Message;
+  user: User;
+}) {
+  const myText = item.sender?._id === user._id;
   return (
     <ListItem
       sx={{
@@ -17,12 +24,14 @@ export default function MessageItem({ item }: { item: string }) {
         flexDirection: myText ? "row-reverse" : "row",
       }}
     >
-      <ListItemAvatar sx={{ justifyContent: "center", display: "flex" }}>
-        <Avatar
-          alt="Remy Sharp"
-          src="https://mui.com/static/images/avatar/2.jpg"
-        />
-      </ListItemAvatar>
+      {!myText && (
+        <ListItemAvatar sx={{ justifyContent: "center", display: "flex" }}>
+          <Avatar
+            alt={item.sender?.firstName}
+            src={item.sender?.avatar.secure_url}
+          />
+        </ListItemAvatar>
+      )}
       <Stack
         sx={{
           maxWidth: "80%",
@@ -39,27 +48,26 @@ export default function MessageItem({ item }: { item: string }) {
               justifyContent="space-between"
             >
               <Typography fontSize={16} fontWeight="600">
-                User name
-              </Typography>
-              <Typography
-                fontSize={14}
-                component="span"
-                variant="body2"
-                color="text.secondary"
-              >
-                01 Jan 2022
+                {myText
+                  ? "You"
+                  : `${item.sender?.firstName} ${item.sender?.lastName}`}
               </Typography>
             </Stack>
           }
           secondary={
-            <Typography
-              sx={{ display: "inline" }}
-              component="span"
-              variant="body2"
-              color="text.secondary"
-            >
-              I'll be in your neighborhood doing errands this…
-            </Typography>
+            <>
+              {item.text}
+              <Typography
+                fontSize={12}
+                component="span"
+                variant="body2"
+                color="text.secondary"
+                display="block"
+                textAlign={myText ? "left" : "right"}
+              >
+                {moment(item.createdAt).fromNow()}
+              </Typography>
+            </>
           }
         />
       </Stack>

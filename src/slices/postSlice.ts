@@ -54,7 +54,10 @@ export default postSlice.reducer;
 // Add post
 export const addPost = createAsyncThunk(
   "/add-post",
-  async (formData: FormData, { rejectWithValue, dispatch }) => {
+  async (
+    { formData, callback }: { formData: FormData; callback: () => void },
+    { rejectWithValue, dispatch }
+  ) => {
     try {
       const res = await axios.post(app.baseApiUrl + "/api/post/add", formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -67,6 +70,7 @@ export const addPost = createAsyncThunk(
         },
       });
       dispatch(openSnackbar({ message: res.data?.message, mode: "success" }));
+      callback();
       return res.data?.post as IPost;
     } catch (error) {
       dispatch(

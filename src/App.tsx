@@ -1,4 +1,3 @@
-import ThemeProvider from "@/provider/ThemeProvider";
 import "react-multi-carousel/lib/styles.css";
 import { Route, Routes } from "react-router-dom";
 import ChangePassPage from "./_auth/ChangePassPage";
@@ -17,44 +16,38 @@ import DiscusPage from "./pages/DiscusPage";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ProfilePage from "./pages/ProfilePage";
-import ReduxProvider from "./provider/ReduxProvider";
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <ReduxProvider>
-        {/* Default Position to top all pages */}
-        <ScrollTop />
-        <SnackbarSetup />
+    <>
+      {/* Default Position to top all pages */}
+      <ScrollTop />
+      <SnackbarSetup />
 
-        <Routes>
-          {/* Private Route */}
-          <Route Component={RootLayout}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            {/* Discus nested route */}
-            <Route element={<DiscusLayout />}>
-              <Route path="/discus" element={<DiscusNotSelect />} />
-              <Route path="/discus/:discusId" element={<DiscusPage />} />
-            </Route>
+      <Routes>
+        {/* Private Route */}
+        <Route Component={RootLayout}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          {/* Discus nested route */}
+          <Route element={<DiscusLayout />}>
+            <Route path="/discus" element={<DiscusNotSelect />} />
+            <Route path="/discus/:discusId" element={<DiscusPage />} />
           </Route>
-          {/* Public Route */}
-          <Route Component={AuthLayout}>
-            <Route path="/auth/sign-in" element={<SignInPage />} />
-            <Route path="/auth/sign-up" element={<SignUpPage />} />
-            <Route path="/auth/forget" element={<ForgetPage />} />
-            <Route element={<ForgetLayout />}>
-              <Route path="/auth/forget/otp" element={<OTPage />} />
-              <Route
-                path="/auth/forget/password"
-                element={<ChangePassPage />}
-              />
-            </Route>
+        </Route>
+        {/* Public Route */}
+        <Route Component={AuthLayout}>
+          <Route path="/auth/sign-in" element={<SignInPage />} />
+          <Route path="/auth/sign-up" element={<SignUpPage />} />
+          <Route path="/auth/forget" element={<ForgetPage />} />
+          <Route element={<ForgetLayout />}>
+            <Route path="/auth/forget/otp" element={<OTPage />} />
+            <Route path="/auth/forget/password" element={<ChangePassPage />} />
           </Route>
-          {/* Global Route */}
-          <Route path="/*" element={<NotFoundPage />} />
-        </Routes>
-      </ReduxProvider>
-    </ThemeProvider>
+        </Route>
+        {/* Global Route */}
+        <Route path="/*" element={<NotFoundPage />} />
+      </Routes>
+    </>
   );
 }
